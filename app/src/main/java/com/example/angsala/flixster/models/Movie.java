@@ -10,6 +10,8 @@ public class Movie {
     private String overview;
     //this is the path from JSON
     private String posterPath;//only give path, which is only part of url
+    //backdrop path
+    private String backdropPath;
 
     //intialize from JSON data
     public Movie(JSONObject jobject) throws JSONException {
@@ -17,6 +19,7 @@ public class Movie {
         title = jobject.getString("title");
         overview = jobject.getString("overview");
         posterPath = jobject.getString("poster_path");
+        backdropPath = jobject.getString("backdrop_path");
 
 
 
@@ -32,5 +35,9 @@ public class Movie {
 
     public String getPosterPath() {
         return posterPath;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
     }
 }

@@ -12,6 +12,9 @@ public class Config {
     //the size of poster to fetch image, part of the url
     String posterSize;
 
+    //new field for orientation manipulation
+    String backdropSize;
+
     //constructor for config
 
     public Config(JSONObject object) throws JSONException {
@@ -22,6 +25,9 @@ public class Config {
         JSONArray posterSizeArray = images.getJSONArray("poster_sizes");
         //know that the poster size wanted is index number 3
         posterSize = posterSizeArray.optString(3, "w342");
+        //parse backdrop sizes, should get backdrop size w780
+        JSONArray backdropSizeArray = images.getJSONArray("backdrop_sizes");
+        backdropSize = backdropSizeArray.optString(1,"w780");
     }
 
     //helper method for creating URLS
@@ -39,4 +45,7 @@ public class Config {
         return posterSize;
     }
 
+    public String getBackdropSize() {
+        return backdropSize;
+    }
 }

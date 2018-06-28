@@ -1,6 +1,7 @@
 package com.example.angsala.flixster;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -65,9 +66,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
         holder.txtvTitle.setText(movie.getTitle());
         holder.txtvOverview.setText(movie.getOverview());
 
+        //determine the current orientation
+        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         //create url with config. Use the config to get the posterSize and the movie PosterPath
-        String imageUrl = config.getimageURL(config.getPosterSize(), movie.getPosterPath());
+        String imageUrl = null;
+        //change url, if portrait mode load the poster image, else load backdrop image
+        if (isPortrait){
+            imageUrl = config.getimageURL(config.getPosterSize(), movie.getPosterPath());}
+            else {
+             imageUrl = config.getimageURL(config.getBackdropSize(), movie.getBackdropPath());}
 
+
+//change Glide arguments, depending on orientation, with ternary operator
+        int placeHolderNum = isPortrait ? R.drawable.flicks_movie_placeholder: R.drawable.flicks_backdrop_placeholder;
+
+        ImageView image_orientation = isPortrait ? holder.imvPosterImage : holder.imvBackdropImage;
         //loading image with GlideApp
         GlideApp.with(context)
                 .load(imageUrl)
@@ -75,7 +88,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                 //remember this is how we access resources in JAVA, via R file
                 .placeholder(R.drawable.flicks_movie_placeholder)
                 .error(R.drawable.flicks_movie_placeholder)
-                .into(holder.imvPosterImage);
+                .into(image_orientation);
+
+
 
     }
 
@@ -93,6 +108,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
         ImageView imvPosterImage;
         TextView txtvTitle;
         TextView txtvOverview;
+        //Track view object for landscape orientation
+        ImageView imvBackdropImage;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -104,6 +121,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
             txtvTitle = (TextView)itemView.findViewById(R.id.txtvTitle);
             //look up overview- R looks at XML!
             txtvOverview = (TextView)itemView.findViewById(R.id.txtvOverview);
+
+            //look up imvBackdropImage- R looks at XML
+            imvBackdropImage = (ImageView)itemView.findViewById(R.id.imvBackdropImage);
         }
     }
 
