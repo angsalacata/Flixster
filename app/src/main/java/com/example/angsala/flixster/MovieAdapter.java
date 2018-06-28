@@ -9,15 +9,33 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.angsala.flixster.models.Config;
 import com.example.angsala.flixster.models.Movie;
 
 import java.util.ArrayList;
-//what here is the superclass exactly?
-//where do these methods come from? Is it inherited by RecyclerView.Adapter?
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
 
     //will wrap the list of movies
     ArrayList<Movie> movies;
+
+    //new Config for glide
+    Config config;
+
+    //context for rendering, so it is available for adapter
+    Context context;
+
+
+    //getters and setters for setting MovieAdapter's config
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
+    }
 
     //initialize with the list, with constructor
     public MovieAdapter(ArrayList<Movie> movies) {
@@ -29,7 +47,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     //creates and inflates a new view
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
         //create the inflater, get context from the parent first
-        Context context = parent.getContext();
+         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         //create the view using the item_movie layout and from inflater
         View movieView = inflater.inflate(R.layout.item_movie, parent, false);
@@ -46,7 +64,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
         //NOTICE this is accessing the item_movie class
         holder.txtvTitle.setText(movie.getTitle());
         holder.txtvOverview.setText(movie.getOverview());
-     //TODO- set image using Glide
+
+        //create url with config. Use the config to get the posterSize and the movie PosterPath
+        String imageUrl = config.getimageURL(config.getPosterSize(), movie.getPosterPath());
+
+        //loading image with GlideApp
+        GlideApp.with(context)
+                .load(imageUrl)
+                .transform(new RoundedCornersTransformation(15,5))
+                //remember this is how we access resources in JAVA, via R file
+                .placeholder(R.drawable.flicks_movie_placeholder)
+                .error(R.drawable.flicks_movie_placeholder)
+                .into(holder.imvPosterImage);
 
     }
 
