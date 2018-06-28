@@ -13,7 +13,7 @@ public class Movie {
 
     //intialize from JSON data
     public Movie(JSONObject jobject) throws JSONException {
-        //let it throuw the exception
+        //let it throw the exception
         title = jobject.getString("title");
         overview = jobject.getString("overview");
         posterPath = jobject.getString("poster_path");

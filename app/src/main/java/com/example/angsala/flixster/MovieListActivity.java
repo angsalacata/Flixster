@@ -2,6 +2,8 @@ package com.example.angsala.flixster;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,10 +39,16 @@ public class MovieListActivity extends AppCompatActivity {
     //the size of poster to fetch image, part of the url
     String posterSize;
 
-    //the list of currently playing movies, stored in an array
+    //the list of currently playing movies, stored in an array- uses Movie.java
     ArrayList<Movie> movies;
 
+    //the recycler view
+    RecyclerView rvMovies;
+    //the adapter wired to the recycler view- uses MovieAdapter.java
+    MovieAdapter adapter;
+
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
@@ -48,12 +56,18 @@ public class MovieListActivity extends AppCompatActivity {
         client = new AsyncHttpClient();
 
         //initialize list of movies
-        movies = new ArrayList<Movie>();
-
+        movies = new ArrayList<>();
+        //initialize recyclerView and MovieAdapter- once movies array is connected to adapter/recycler
+        //cannot reinitialize the movie array list
+        adapter = new MovieAdapter(movies);
+        //resolve the recycler view and connect a layout manager and the adapter
+        rvMovies = (RecyclerView) findViewById(R.id.rvMovies);
+        //Recycler has needs layout
+        rvMovies.setLayoutManager(new LinearLayoutManager(this));
+        rvMovies.setAdapter(adapter);
         //can now get the configuration, add after client is made
+
         getConfiguration();
-
-
     }
 
     //get the configuration from the API. Remember configuration is the endpoint with
@@ -63,7 +77,7 @@ public class MovieListActivity extends AppCompatActivity {
         String url = API_BASE_URL + "/configuration";
         //set up the request parameters- seen in the documentation for async
         RequestParams params = new RequestParams();
-        //will look at using the api_key in the secret file
+        //will look at using the api_key in the secret file, api key always needed
         params.put(API_KEY_PARAM, getString(R.string.api_key));
 
         //execute the GET request, expecting a JSON object. Take care of the secure base url/poster sizes
@@ -80,8 +94,11 @@ public class MovieListActivity extends AppCompatActivity {
                     //know that the poster size wanted is index number 3
                     posterSize = posterSizeArray.optString(3, "w342");
                     Log.i(TAG, String.format("Loaded configuration with Base URL %s and Poster Size %s", imageBaseUrl, posterSize));
+
+
                     //can now get the now_playing movie list
                     getNowPlaying();
+
                 } catch (JSONException e) {
                     //alert user of error when parsing
                     logError("Failed parse in configuration api", e, true);
@@ -113,16 +130,18 @@ public class MovieListActivity extends AppCompatActivity {
                     JSONArray results = response.getJSONArray("results");
                     //parse as a JSON array. You can see it is a JSON array called results
                     //iterate through to add
-                    for (int i=0; i < results.length(); ++i){
+                    for (int i = 0; i < results.length(); i++){
+                        //create new movie object
                         Movie movie = new Movie(results.getJSONObject(i));
                         movies.add(movie);
+                        //notify adapter that a row was added to the end of the list
+                        adapter.notifyItemInserted(movies.size() - 1);
                     }
-                    //this will put the results.length() into the %s
+                    //this will put the results.length() into the %s, which is a place holder
                     Log.i(TAG, String.format("Loaded %s movies", results.length()));
                 }
-
                 catch (JSONException e){
-                    logError("Failed Parse in now_playing api", e, true); }
+                    logError("Failed parsing in now_playing api", e, true); }
             }
 
             @Override
@@ -134,12 +153,13 @@ public class MovieListActivity extends AppCompatActivity {
 
 
     //handle errors, log and alert the user
+    //like helper method
     private void logError(String message, Throwable e, boolean alertUser){
         //always log error for developer
         Log.e(TAG, message, e);
         //alert the user using a toast
         if (alertUser){
-            Toast. makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
     }
 }
