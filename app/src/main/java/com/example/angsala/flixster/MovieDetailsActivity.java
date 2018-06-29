@@ -40,7 +40,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         //set the ratings bar with scale of 0-10 divide by two
         float voteAverage = movie.getVoteAverage().floatValue();
-        rbVotingAverage.setRating(voteAverage/2);// = voteAverage > 0 ? voteAverage/2.0f : voteAverage);
+        rbVotingAverage.setRating(voteAverage = voteAverage > 0 ? voteAverage/2.0f : voteAverage);
 
         //IDEAS FOR OTHER TEXT FIELDS: POPULARITY AND ADULT TAG- need to know how to cast text view into string to look for "true or false"
     }

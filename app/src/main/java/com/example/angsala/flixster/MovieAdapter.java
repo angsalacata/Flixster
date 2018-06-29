@@ -147,7 +147,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                 //it will connect the click to the new MovieDetailsActivity activity
                 intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
                 //show this new MovieDetailsActivity activity
-                //We use context here because we are in an adapter, whereas startActivity() can be used by itself when on an Activity
+                //We use context here because we are in an adapter, whereas startActivity() can be used by itself when
                 context.startActivity(intent);
             }
 

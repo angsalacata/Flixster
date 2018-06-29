@@ -31,6 +31,7 @@
         android:layout_below="@+id/txtvTitle"
         android:layout_marginLeft="10dp"
         android:numStars="5"
+        android:progressBackgroundTint="#ffffff"
         android:stepSize="0.5" />
 
     <TextView
