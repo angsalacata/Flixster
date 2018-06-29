@@ -1,6 +1,7 @@
 package com.example.angsala.flixster;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.angsala.flixster.models.Config;
 import com.example.angsala.flixster.models.Movie;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -91,7 +94,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                 .into(image_orientation);
 
 
-
     }
 
     // returns total number of items in the list
@@ -102,7 +104,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     }
 
     //create viewHolder class as a static inner class
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //track view objects, found in item_movie XML
         ImageView imvPosterImage;
@@ -111,7 +114,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
         //Track view object for landscape orientation
         ImageView imvBackdropImage;
 
-
+//view holder constructor
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             //look up objects by id
@@ -124,6 +127,30 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
 
             //look up imvBackdropImage- R looks at XML
             imvBackdropImage = (ImageView)itemView.findViewById(R.id.imvBackdropImage);
+
+            //added as the itemView's onClickListener
+            itemView.setOnClickListener(this);
+        }
+
+        //implemented, added from implements method. adeed to get ratings and details
+
+        //We use onClick because in the viewHolder class above, put in "implements View.OnClickListener"
+        @Override
+        public void onClick(View view) {
+            int viewPosition = getAdapterPosition();
+            //check if position exists in the Recycler View
+            if (viewPosition != RecyclerView.NO_POSITION){
+                Movie movie = movies.get(viewPosition);
+                //create new intent for new activity, we use .class, needed because we don't have a MovieDetailsActivity instanced yet
+                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                //serialize (?) movie with parceler, using short name as key, not sure what this one does, other than
+                //it will connect the click to the new MovieDetailsActivity activity
+                intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+                //show this new MovieDetailsActivity activity
+                //We use context here because we are in an adapter, whereas startActivity() can be used by itself when on an Activity
+                context.startActivity(intent);
+            }
+
         }
     }
 
