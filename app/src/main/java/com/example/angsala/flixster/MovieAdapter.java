@@ -31,6 +31,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     //context for rendering, so it is available for adapter
     Context context;
 
+    public final static String placeholder = "https://api.themoviedb.org/3";
 
     //getters and setters for setting MovieAdapter's config
     public Config getConfig() {
@@ -146,9 +147,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                 //serialize (?) movie with parceler, using short name as key, not sure what this one does, other than
                 //it will connect the click to the new MovieDetailsActivity activity
                 intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+                //to put a backdrop in the activities view
+                intent.putExtra(placeholder, config.getimageURL(config.getBackdropSize(), movie.getBackdropPath()));
                 //show this new MovieDetailsActivity activity
                 //We use context here because we are in an adapter, whereas startActivity() can be used by itself when
                 context.startActivity(intent);
+
             }
 
         }

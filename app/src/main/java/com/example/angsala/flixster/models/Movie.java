@@ -17,7 +17,8 @@ public class Movie {
      String backdropPath;
      //track voteAverage
      Double voteAverage;
-
+    //track integer filed that is parsed from JSONObject. Key looking for is id
+     int vidId;
      //default constructor
      public Movie(){
 
@@ -32,6 +33,7 @@ public class Movie {
         posterPath = jobject.getString("poster_path");
         backdropPath = jobject.getString("backdrop_path");
         voteAverage = jobject.getDouble("vote_average");
+        vidId = jobject.getInt("id");
 
 
 
@@ -54,4 +56,8 @@ public class Movie {
     }
 
     public Double getVoteAverage() { return voteAverage;}
+
+    public int getVidId() {
+        return vidId;
+    }
 }
