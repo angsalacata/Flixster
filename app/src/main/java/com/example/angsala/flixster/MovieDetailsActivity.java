@@ -85,7 +85,6 @@ int id;
         rbVotingAverage.setRating(voteAverage = voteAverage > 0 ? voteAverage/2.0f : voteAverage);
 
 
-        //IDEAS FOR OTHER TEXT FIELDS: POPULARITY AND ADULT TAG- need to know how to cast text view into string to look for "true or false"
     getVideo();
 
     }
