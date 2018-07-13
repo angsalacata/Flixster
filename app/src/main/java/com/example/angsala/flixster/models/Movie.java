@@ -19,7 +19,7 @@ public class Movie {
      Double voteAverage;
     //track integer filed that is parsed from JSONObject. Key looking for is id
      int vidId;
-     //default constructor
+     //default constructor- why was this needed?
      public Movie(){
 
      }

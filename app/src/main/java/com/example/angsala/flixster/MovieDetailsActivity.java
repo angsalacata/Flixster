@@ -72,7 +72,7 @@ int id;
 
        // imvBackdropImage.getImage
         GlideApp.with(this)
-                .load(this.getIntent().getStringExtra(placeholder))
+                .load(this.getIntent().getStringExtra(placeholder))// this will bring up the backdrop url
                 .transform(new RoundedCornersTransformation(15,5))
                 //remember this is how we access resources in JAVA, via R file
                 .placeholder(R.drawable.flicks_backdrop_placeholder)
@@ -80,7 +80,7 @@ int id;
                 .into(imvBackdropImage);
 
 
-        //set the ratings bar with scale of 0-10 divide by two
+        //set the ratings bar with scale of 0-10 divide by two. Have to recast it because in JSON parsing cannot get the voteAverage as a Float, only a double
         float voteAverage = movie.getVoteAverage().floatValue();
         rbVotingAverage.setRating(voteAverage = voteAverage > 0 ? voteAverage/2.0f : voteAverage);
 

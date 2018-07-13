@@ -139,7 +139,8 @@ public class MovieListActivity extends AppCompatActivity {
                         //create new movie object
                         Movie movie = new Movie(results.getJSONObject(i));
                         //String name = movie.getTitle();
-                        movies.add(movie);
+                        movies.add(movie);// so movies is pass by ref - well the adapter is notified in the line below, so those three methods for the recycler
+                        //view will be called for every movie iteration in the loop!
                         //notify adapter that a row was added to the end of the list
                         adapter.notifyItemInserted(movies.size() - 1);
                     }

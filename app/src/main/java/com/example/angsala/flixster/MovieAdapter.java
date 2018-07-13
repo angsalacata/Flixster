@@ -49,21 +49,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
 
     @NonNull
     @Override
-    //creates and inflates a new view
+    //creates and inflates a new view (conntects item_movie to the scrolling activity of activity_movie_list)
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
-        //create the inflater, get context from the parent first
+        //create the inflater, get context from the parent first// in this case parent = Movie_List_Activity xml
          context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         //create the view using the item_movie layout and from inflater
         View movieView = inflater.inflate(R.layout.item_movie, parent, false);
         // return a view movieView wrapped in a new ViewHolder
-        return new ViewHolder(movieView);
+        return new ViewHolder(movieView);// uses the constructor at the bottom of this page
     }
 
-    //binds an inflated view to a new item
+    //binds an inflated view to a new item, in charge of putting movie info in each of the slots of the view IN java land
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //get movie data at the specified position
+        //get movie data at the specified position- from the array of movies we passed in from the MainListActivity!
         Movie movie = movies.get(position);
         //populate the view with the movie data
         //NOTICE this is accessing the item_movie class
@@ -90,10 +90,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                 .load(imageUrl)
                 .transform(new RoundedCornersTransformation(15,5))
                 //remember this is how we access resources in JAVA, via R file
-                .placeholder(R.drawable.flicks_movie_placeholder)
-                .error(R.drawable.flicks_movie_placeholder)
+                .placeholder(placeHolderNum)
+                .error(placeHolderNum)
                 .into(image_orientation);
-
 
     }
 
@@ -105,7 +104,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     }
 
     //create viewHolder class as a static inner class
-
+//in charge of putting the movie information in XML land
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //track view objects, found in item_movie XML
@@ -150,7 +149,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                 //to put a backdrop in the activities view
                 intent.putExtra(placeholder, config.getimageURL(config.getBackdropSize(), movie.getBackdropPath()));
                 //show this new MovieDetailsActivity activity
-                //We use context here because we are in an adapter, whereas startActivity() can be used by itself when
+                //We use context here because we are in an adapter, whereas startActivity() can be used by itself when simply on an activity
                 context.startActivity(intent);
 
             }
