@@ -49,6 +49,7 @@ public class MovieListActivity extends AppCompatActivity {
     MovieAdapter adapter;
     //config
     Config config;
+    //test comment
 
     @Override
 
